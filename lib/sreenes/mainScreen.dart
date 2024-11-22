@@ -26,7 +26,7 @@ class _MainScreenState extends State<MainScreen> {
     appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.all(8.0), 
-          child: Image.asset('../assets/logos/t_logo.png'),
+          child: Image.asset('../assets/logos/t.png'),
         ),
       ),
       bottomNavigationBar: appNavigationBar(),
