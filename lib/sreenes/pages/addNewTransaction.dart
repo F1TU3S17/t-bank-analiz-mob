@@ -71,6 +71,9 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                   if (double.tryParse(value) == null) {
                     return 'Введите корректное число';
                   }
+                  if (double.parse(value) <= 0) {
+                    return 'Сумма должна быть больше нуля';
+                  }
                   return null;
                 },
               ),
