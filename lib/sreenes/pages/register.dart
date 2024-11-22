@@ -40,6 +40,15 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final _emailController = TextEditingController();
   String? _emailError;
+  // Переменная для хранения состояния галочки (согласие)
+  bool _isChecked = false;
+
+  // Функция для изменения состояния галочки
+  void _onChanged(bool? value) {
+    setState(() {
+      _isChecked = value ?? false;
+    });
+  }
 
   bool _validateEmail(String email) {
     final emailRegex =
@@ -72,7 +81,7 @@ class _RegisterState extends State<Register> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
           ),
-          height: 600,
+          height: 700,
           width: 300,
           child: Column(
             children: [
@@ -225,8 +234,25 @@ class _RegisterState extends State<Register> {
                 ),
               ),
               const SizedBox(height: 20),
+              CheckboxListTile(
+                value: _isChecked, // Состояние галочки
+                onChanged: _onChanged, // Функция, меняющая состояние
+                title: const Text(
+                  'Я согласен на обработку персональных данных',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                controlAffinity:
+                    ListTileControlAffinity.leading, // Галочка слева
+              ),
+              const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: _onRegister,
+                onPressed: _isChecked
+                    ? () {
+                        _onRegister;
+                      }
+                    : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.yellow,
                   minimumSize: const Size(100, 50),
