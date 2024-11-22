@@ -41,7 +41,7 @@ class _MainScreenState extends State<MainScreen> {
         /// Страница аналитики
         AnaliticPage(),
         /// Cтраница добавления новой транзакции
-        AddNewTransaction(),  
+        AddNewTransaction(theme: theme,),  
         /// Страница целей
         TargetPage(theme: theme),
         /// Страница ЕЩЕ
