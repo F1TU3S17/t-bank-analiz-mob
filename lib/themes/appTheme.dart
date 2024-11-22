@@ -7,7 +7,31 @@ final ThemeData appTheme = ThemeData(
     primarySwatch: Colors.yellow, //Основный акцентный цвет
     brightness: Brightness.dark,  // Темный режим
   ),
+  textTheme: const TextTheme(
+      displayLarge: TextStyle(
+        fontSize: 36,
+        fontWeight: FontWeight.bold,
+      ),
+      titleLarge: TextStyle(
+        fontSize: 24,
+        fontStyle: FontStyle.normal,
+        fontWeight: FontWeight.bold,
+      color: Colors.white,
+      ),
+      titleMedium: TextStyle(
+        fontSize: 18,
+        fontStyle: FontStyle.normal,
+        fontWeight: FontWeight.bold,
+      ),
+      bodyMedium: TextStyle(
+        fontSize: 18,
+        fontStyle: FontStyle.normal,
+        color: Colors.white,
+      ),
+    ),
+  
 
+  cardColor: Colors.black.withOpacity(0.1),
 
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
@@ -20,3 +44,4 @@ final ThemeData appTheme = ThemeData(
     ),
   ),
 );
+
