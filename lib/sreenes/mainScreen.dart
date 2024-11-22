@@ -23,19 +23,12 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     return Scaffold(
-<<<<<<< HEAD
     appBar: AppBar(
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Center(child: const Text('Т-Аналитика', style: TextStyle(fontSize: 26))),
           ],
-=======
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Image.asset('../assets/logos/t.png'),
->>>>>>> master
         ),
       ),
       bottomNavigationBar: appNavigationBar(),
