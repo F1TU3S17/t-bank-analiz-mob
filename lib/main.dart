@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hakaton4k/sreenes/mainScreen.dart';
 import 'package:hakaton4k/themes/appTheme.dart';
 
@@ -16,6 +17,17 @@ class BudgetHelperApp extends StatelessWidget {
     return MaterialApp(
       theme: appTheme,
       title: 'Финансовый помощник',
+       localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', ''), // Английский
+        Locale('ru', ''), // Русский
+      ],
+      locale: const Locale('ru', ''), // Устанавливаем русский язык
+      
       home: const MainScreen(),
     );
   }
