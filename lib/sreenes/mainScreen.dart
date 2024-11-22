@@ -23,15 +23,13 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     return Scaffold(
-    appBar: AppBar(
+      appBar: AppBar(
         leading: Padding(
-          padding: const EdgeInsets.all(8.0), 
-          child: Image.asset('../assets/logos/t.png'),
+          padding: const EdgeInsets.all(8.0),
         ),
       ),
       bottomNavigationBar: appNavigationBar(),
       body: <Widget>[
-  
         /// Home page
         HomePage(theme: theme),
 
@@ -51,9 +49,9 @@ class _MainScreenState extends State<MainScreen> {
       selectedIndex: currentPageIndex,
       destinations: const <Widget>[
         NavigationDestination(
-            selectedIcon: Icon(Icons.home),
-            icon: Icon(Icons.home_outlined),
-            label: 'Главная',
+          selectedIcon: Icon(Icons.home),
+          icon: Icon(Icons.home_outlined),
+          label: 'Главная',
         ),
         NavigationDestination(
           icon: Icon(Icons.analytics_sharp),
@@ -70,4 +68,3 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
-

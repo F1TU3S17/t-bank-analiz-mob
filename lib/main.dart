@@ -6,7 +6,6 @@ import 'package:hakaton4k/themes/appTheme.dart';
 void main() {
   debugPaintSizeEnabled = false;
   runApp(const BudgetHelperApp());
-  
 }
 
 class BudgetHelperApp extends StatelessWidget {
@@ -21,4 +20,3 @@ class BudgetHelperApp extends StatelessWidget {
     );
   }
 }
-
