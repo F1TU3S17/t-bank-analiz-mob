@@ -4,7 +4,9 @@ import 'package:hakaton4k/mapping/categories/incomeCategories.dart';
 import 'package:hakaton4k/mapping/currency_mapping.dart';
 
 class AddNewTransaction extends StatefulWidget {
-  const AddNewTransaction({super.key});
+  const AddNewTransaction({super.key, required this.theme});
+
+  final ThemeData theme;
 
   @override
   State<AddNewTransaction> createState() => _AddNewTransactionState();
@@ -18,7 +20,13 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
   bool _isExpense = true;
   final TextEditingController _amountController = TextEditingController();
 
-  
+  String _dateToString() {
+    String answer;
+    answer =
+        _selectedDate.toLocal().toString().split(' ')[0].replaceAll('-', '.');
+    return answer;
+  }
+
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       print('Сумма: ${_amountController.text}');
@@ -49,164 +57,175 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
       appBar: AppBar(
         title: const Text('Добавить транзакцию'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Поле ввода суммы
-              TextFormField(
-                controller: _amountController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'Сумма',
-                  prefixIcon: Icon(Icons.monetization_on, color: Colors.yellowAccent),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: widget.theme.cardColor,
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Введите сумму';
-                  }
-                  if (double.tryParse(value) == null) {
-                    return 'Введите корректное число';
-                  }
-                  if (double.parse(value) <= 0) {
-                    return 'Сумма должна быть больше нуля';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Выбор валюты
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: 'Валюта',
-                  prefixIcon: Icon(Icons.currency_exchange, color: Colors.yellowAccent),
-                ),
-                value: _selectedCurrency,
-                items: currencyMapping.keys
-                    .map((code) => DropdownMenuItem(
-                          value: code,
-                          child: Row(
-                            children: [
-                              currencyMapping[code]!,
-                              const SizedBox(width: 8),
-                              Text(code),
-                            ],
-                          ),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedCurrency = value!;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Выберите валюту';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Выбор типа транзакции
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const Text('Тип транзакции:', style: TextStyle(fontSize: 16)),
-                  const SizedBox(width: 16),
-                  ChoiceChip(
-                    label: const Text('Расход'),
-                    selected: _isExpense,
-                    selectedColor: Colors.yellow,
-                    onSelected: (selected) {
-                      setState(() {
-                        _isExpense = true;
-                        _category = null;
-                      });
-                    },
-                  ),
-                  const SizedBox(width: 8),
-                  ChoiceChip(
-                    label: const Text('Доход'),
-                    selected: !_isExpense,
-                    selectedColor: Colors.yellow,
-                    onSelected: (selected) {
-                      setState(() {
-                        _isExpense = false;
-                        _category = null;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-
-              // Выбор категории
-              DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  labelText: 'Категория ${_isExpense ? "расходов" : "доходов"}',
-                  prefixIcon: const Icon(Icons.create, color: Colors.yellowAccent),
-                ),
-                value: _category,
-                items: (_isExpense ? expenseCategories : incomeCategories)
-                    .entries
-                    .map(
-                      (entry) => DropdownMenuItem(
-                        value: entry.key,
-                        child: Row(
-                          children: [
-                            Icon(entry.value, color: Colors.yellowAccent),
-                            const SizedBox(width: 8),
-                            Text(entry.key),
-                          ],
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Поле ввода суммы
+                      TextFormField(
+                        controller: _amountController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          labelText: 'Сумма',
+                          prefixIcon: Icon(Icons.monetization_on,
+                              color: Colors.yellowAccent),
                         ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Введите сумму';
+                          }
+                          if (double.tryParse(value) == null) {
+                            return 'Введите корректное число';
+                          }
+                          return null;
+                        },
                       ),
-                    )
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _category = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Выберите категорию';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
-              // Выбор даты
-              Row(
-                children: [
-                  Text(
-                    'Дата: ${_selectedDate.toLocal()}'.split(' ')[0],
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(width: 16),
-                  ElevatedButton(
-                    onPressed: () => _selectDate(context),
-                    child: const Text('Выбрать дату'),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
+                      // Выбор валюты
+                      DropdownButtonFormField<String>(
+                        decoration: const InputDecoration(
+                          labelText: 'Валюта',
+                          prefixIcon: Icon(Icons.currency_exchange,
+                              color: Colors.yellowAccent),
+                        ),
+                        value: _selectedCurrency,
+                        items: currencyMapping.keys
+                            .map((code) => DropdownMenuItem(
+                                  value: code,
+                                  child: Row(
+                                    children: [
+                                      currencyMapping[code]!,
+                                      const SizedBox(width: 8),
+                                      Text(code),
+                                    ],
+                                  ),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedCurrency = value!;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Выберите валюту';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
 
-              // Кнопка сохранения
-              Center(
-                child: ElevatedButton(
-                  onPressed: _submitForm,
-                  child: const Text('Сохранить'),
+                      // Выбор типа транзакции
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text('Тип:', style: TextStyle(fontSize: 16)),
+                          const SizedBox(width: 16),
+                          ChoiceChip(
+                            label: const Text('Расход'),
+                            selected: _isExpense,
+                            selectedColor: Colors.yellow,
+                            onSelected: (selected) {
+                              setState(() {
+                                _isExpense = true;
+                                _category = null;
+                              });
+                            },
+                          ),
+                          const SizedBox(width: 8),
+                          ChoiceChip(
+                            label: const Text('Доход'),
+                            selected: !_isExpense,
+                            selectedColor: Colors.yellow,
+                            onSelected: (selected) {
+                              setState(() {
+                                _isExpense = false;
+                                _category = null;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Выбор категории
+                      DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText:
+                              'Категория ${_isExpense ? "расходов" : "доходов"}',
+                          prefixIcon: const Icon(Icons.create,
+                              color: Colors.yellowAccent),
+                        ),
+                        value: _category,
+                        items:
+                            (_isExpense ? expenseCategories : incomeCategories)
+                                .entries
+                                .map(
+                                  (entry) => DropdownMenuItem(
+                                    value: entry.key,
+                                    child: Row(
+                                      children: [
+                                        Icon(entry.value,
+                                            color: Colors.yellowAccent),
+                                        const SizedBox(width: 8),
+                                        Text(entry.key),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _category = value;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Выберите категорию';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Выбор даты
+                      Text(
+                        'Выбранная дата: ${_dateToString()}',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () => _selectDate(context),
+                        child: const Text('Выбрать дату'),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+          // Кнопка сохранения
+          Center(
+            child: ElevatedButton(
+              onPressed: _submitForm,
+              child: const Text('Сохранить'),
+            ),
+          ),
+        ],
       ),
     );
   }
