@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class MessagesPage extends StatelessWidget {
+class TargetPage extends StatelessWidget {
 
-  const MessagesPage({
+  const TargetPage({
     super.key,
     required this.theme,
   });
