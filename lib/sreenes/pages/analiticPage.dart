@@ -10,7 +10,6 @@ class AnaliticPage extends StatefulWidget {
 class _AnaliticPageState extends State<AnaliticPage> {
   DateTimeRange? _selectedDateRange;
   List<Map<String, dynamic>> _analyticsData = [];
-  DateTime _selectedDate = DateTime.now();
 
   // Заглушка для функции отправки данных (будет заменена на реальный запрос на сервер)
   Future<void> _fetchAnalyticsData(DateTime start, DateTime end) async {
@@ -49,10 +48,57 @@ class _AnaliticPageState extends State<AnaliticPage> {
   // Открытие выбора диапазона дат
   Future<void> _selectDateRange(BuildContext context) async {
     DateTimeRange? picked = await showDateRangePicker(
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
       context: context,
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
       initialDateRange: _selectedDateRange,
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Colors.yellow, // Цвет для выделения
+              onPrimary:
+                  Colors.black, // Цвет текста и элементов на фоне primary
+              secondary: Colors.grey, // Цвет для акцентов
+              onSecondary:
+                  Colors.black, // Цвет текста и элементов на фоне secondary
+              onSurface: Colors.white,
+            ),
+            scaffoldBackgroundColor:
+                Colors.grey[900], // Устанавливаем фон календаря
+            dialogBackgroundColor: Colors.grey[850], // Фон всплывающего окна
+            dialogTheme: DialogTheme(
+              backgroundColor: Colors.grey[850], // Цвет окна ручного ввода
+            ),
+            textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                    foregroundColor:
+                        Colors.black)), // Используем foregroundColor
+            iconTheme: IconThemeData(color: Colors.white), // Белые иконки
+            textTheme: TextTheme(
+              bodyLarge:
+                  TextStyle(color: Colors.black), // Белый цвет для текста
+              bodyMedium:
+                  TextStyle(color: Colors.white), // Белый цвет для текста
+              bodySmall:
+                  TextStyle(color: Colors.white), // Белый цвет для субтитров
+            ),
+            inputDecorationTheme: InputDecorationTheme(
+              filled: true,
+              fillColor: Colors.grey[800], // Цвет фона текстового поля
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(
+                  color: Colors.yellow, // Цвет рамки при фокусе
+                  width: 2,
+                ),
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (picked != null && picked != _selectedDateRange) {
@@ -142,12 +188,14 @@ class _AnaliticPageState extends State<AnaliticPage> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
+                          color: Colors.white, // Белый цвет текста заголовка
                         ),
                       ),
                       subtitle: Text(
                         data['info'],
                         style: TextStyle(
                           fontSize: 16,
+                          color: Colors.white, // Белый цвет текста субтитров
                         ),
                       ),
                     ),
