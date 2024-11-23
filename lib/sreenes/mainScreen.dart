@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hakaton4k/sreenes/pages/QRscaner.dart';
 import 'package:hakaton4k/sreenes/pages/analiticPage.dart';
 import 'package:hakaton4k/sreenes/pages/homePage.dart';
 import 'package:hakaton4k/sreenes/pages/more.dart';
@@ -26,27 +27,52 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     return Scaffold(
-    appBar: AppBar(
-        title: const Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Center(child: const Text('Т-Аналитика', style: TextStyle(fontSize: 26))),
-          ],
+      appBar: AppBar(
+        title: const Text(
+          'Т-Аналитика',
+          style: TextStyle(fontSize: 26),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.qr_code_scanner_outlined,
+              size: 34,
+              color: Colors.yellowAccent,
+            ),
+            onPressed: () async {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => QRScannerPage()),
+              );
+
+              if (result != null) {
+                // Здесь можно обработать результат, если QR-код был успешно считан
+                print('Считанный QR-код: $result');
+              } else {
+                print('Сканирование отменено');
+              }
+            },
+          ),
+        ],
       ),
       bottomNavigationBar: appNavigationBar(),
       body: <Widget>[
         /// Главная страница
         HomePage(theme: theme),
+
         /// Страница аналитики
         AnaliticPage(),
+
         /// Cтраница добавления новой транзакции
-        AddNewTransaction(theme: theme,),  
+        AddNewTransaction(
+          theme: theme,
+        ),
+
         /// Страница целей
         TargetPage(theme: theme),
+
         /// Страница ЕЩЕ
         MoreInfoPage(theme: theme),
-       
       ][currentPageIndex],
     );
   }
@@ -63,7 +89,7 @@ class _MainScreenState extends State<MainScreen> {
           icon: Icon(Icons.home_outlined),
           label: 'Главная',
         ),
-        
+
         NavigationDestination(
           icon: Icon(Icons.analytics_sharp),
           label: 'Аналитика',
@@ -88,7 +114,7 @@ class _MainScreenState extends State<MainScreen> {
           label: 'Цели',
         ),
         NavigationDestination(
-          icon: Icon(Icons.more), 
+          icon: Icon(Icons.more),
           label: 'Еще',
         )
       ],
